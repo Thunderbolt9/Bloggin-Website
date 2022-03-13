@@ -1,14 +1,20 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Form, Button } from "react-bootstrap";
 
 export default function Login() {
-  const { login, signInWithGoogle } = useAuth();
+  const { currentUser, login, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const emailRef = useRef("");
   const passwordRef = useRef("");
   let ifErrorOccurred = false;
+
+  useEffect(() => {
+    if (currentUser !== null) {
+      navigate("/");
+    }
+  }, [currentUser, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
