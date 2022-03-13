@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Button } from "react-bootstrap";
-// import { doc, deleteDoc } from "firebase/firestore";
-// import { db } from "../firebase";
+import { Badge } from "react-bootstrap";
 
 function Blogs({ blogsList, getAllBlogs, uid }) {
   const [blogsData, setBlogsData] = useState(blogsList);
@@ -25,12 +23,6 @@ function Blogs({ blogsList, getAllBlogs, uid }) {
                 {blog.author.name}
               </Badge>
               <p>{blog.content}</p>
-              {blog.author.id === uid ? (
-                <div className="d-flex mt-4">
-                  <Button variant="outline-secondary me-3">Update</Button>
-                  <Button variant="outline-danger">Delete</Button>
-                </div>
-              ) : null}
             </div>
           ))}
         </div>

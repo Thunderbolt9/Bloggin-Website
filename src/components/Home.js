@@ -24,7 +24,7 @@ export default function Home() {
     } else {
       const getPosts = async () => {
         const data = await getDocs(collection(db, "blogs"));
-        setBlogList(data.docs.map((doc) => ({ ...doc.data() })));
+        setBlogList(data.docs.map((doc) => ({ ...doc.data(), docId: doc.id })));
       };
 
       getPosts();
