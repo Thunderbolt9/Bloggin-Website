@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
-import "../index.css";
 
 export default function Register() {
   const { registerUser, updateUserName } = useAuth();
@@ -9,67 +9,60 @@ export default function Register() {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const userNameRef = useRef("");
-  const [isloading, setIsLoading] = useState(false);
   let ifErrorOccurred = false;
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-      setIsLoading(true);
       await registerUser(emailRef.current.value, passwordRef.current.value);
       await updateUserName(userNameRef.current.value);
     } catch {
       ifErrorOccurred = true;
       alert("Failed to create account!");
     }
-    setIsLoading(false);
     if (!ifErrorOccurred) {
       navigate("/");
     }
   }
 
   return (
-    <div className="register">
-      <Link to="/">
-        <img
-          className="register__logo"
-          alt="amazon-logo"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png"
+    <Form onSubmit={handleSubmit} className="w-25 m-auto p-4 shadow mt-5">
+      <h3 className="text-center">Register</h3>
+
+      <Form.Group className="mb-3" controlId="formBasicName">
+        <Form.Label>Enter full name</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Enter your full name"
+          ref={userNameRef}
         />
-      </Link>
+      </Form.Group>
 
-      <div className="register__container">
-        <h1>Sign-up</h1>
-        <form onSubmit={handleSubmit}>
-          <h5>Username</h5>
-          <input type="text" ref={userNameRef} required />
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control type="email" placeholder="Enter email" ref={emailRef} />
+      </Form.Group>
 
-          <h5>E-mail</h5>
-          <input type="email" ref={emailRef} required />
-
-          <h5>Password</h5>
-          <input type="password" ref={passwordRef} required />
-
-          <button
-            disabled={isloading}
-            className="register__signUnButton"
-            type="submit"
-          >
-            Sign Up
-          </button>
-        </form>
-
-        <p>
-          By signing-in you agree to the AMAZON FAKE CLONE Conditions of Use &
-          Sale. Please see our Privacy Notice, our Cookies Notice and our
-          Interest-Based Ads Notice.
-        </p>
-
-        <Link to="/login">
-          <button className="register__signInButton">Sign In</button>
-        </Link>
+      <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          type="password"
+          placeholder="Password"
+          ref={passwordRef}
+        />
+      </Form.Group>
+      <p className="text-center">
+        Have an account,{" "}
+        <a href="/login" style={{ textDecoration: "none" }}>
+          Login
+        </a>
+      </p>
+      <div className="text-center">
+        <Button variant="primary" type="submit">
+          Register
+        </Button>
       </div>
-    </div>
+    </Form>
   );
 }

@@ -64,12 +64,6 @@ function CreateBlog() {
       ) : (
         "please sign in"
       )}
-
-      {/* {isAuth && post.author.id === auth.currentUser.uid ? (
-        <div className="deletePost">
-          <button onClick={deletePost(post.author.id)}>&#128465;</button>
-        </div>
-      ) : null} */}
     </>
   );
 }

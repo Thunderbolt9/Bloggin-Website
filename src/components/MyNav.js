@@ -16,10 +16,26 @@ function MyNav() {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-        <Navbar.Text>Welcome {currentUser.displayName}</Navbar.Text>
+        <div>
+          <Navbar.Brand href="/">Q-Blogs</Navbar.Brand>
+          <Navbar.Text className="text-white">
+            <a href="/createblog" style={{ textDecoration: "none" }}>
+              Create blog
+            </a>
+          </Navbar.Text>
+        </div>
+        <div>
+          <Navbar.Text className="text-white">
+            Welcome {currentUser.displayName}
+          </Navbar.Text>
+          <Button
+            onClick={handleLogout}
+            className="ms-5 bg-white text-black border-white"
+          >
+            Logout
+          </Button>
+        </div>
       </Container>
-      <Button onClick={handleLogout}>Logout</Button>
     </Navbar>
   );
 }

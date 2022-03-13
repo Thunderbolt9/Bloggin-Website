@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import { auth } from "../firebase.js";
 import {
@@ -6,6 +7,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 
 const AuthContext = React.createContext();
@@ -17,6 +20,8 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isloading, setIsLoading] = useState(true);
+  const provider = new GoogleAuthProvider();
+  const navigate = useNavigate();
 
   function registerUser(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -36,6 +41,12 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  function signInWithGoogle() {
+    signInWithPopup(auth, provider)
+      .then(navigate("/"))
+      .catch((error) => console.log(error));
+  }
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -49,6 +60,7 @@ export function AuthProvider({ children }) {
     login,
     logOut,
     updateUserName,
+    signInWithGoogle,
   };
 
   return (

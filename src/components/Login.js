@@ -1,11 +1,10 @@
-import React, { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import "../index.css";
+import { Form, Button } from "react-bootstrap";
 
 export default function Login() {
-  const { login } = useAuth();
-  const [isloading, setIsLoading] = useState(false);
+  const { login, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const emailRef = useRef("");
   const passwordRef = useRef("");
@@ -15,14 +14,11 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      setIsLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
     } catch (err) {
       ifErrorOccurred = true;
       alert("Failed to Login");
     }
-
-    setIsLoading(false);
 
     if (!ifErrorOccurred) {
       navigate("/");
@@ -30,45 +26,50 @@ export default function Login() {
   }
 
   return (
-    <div className="login">
-      <Link to="/">
-        <img
-          className="login__logo"
-          alt="amazon-logo"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png"
-        />
-      </Link>
+    <>
+      <Form onSubmit={handleSubmit} className="w-25 m-auto p-4 shadow mt-5">
+        <h3 className="text-center">Login</h3>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control type="email" placeholder="Enter email" ref={emailRef} />
+        </Form.Group>
 
-      <div className="login__container">
-        <h1>Sign-in</h1>
-        <form onSubmit={handleSubmit}>
-          <h5>E-mail</h5>
-          <input type="text" ref={emailRef} />
-
-          <h5>Password</h5>
-          <input type="password" ref={passwordRef} />
-
-          <button
-            disabled={isloading}
-            className="login__signInButton"
-            type="submit"
-          >
-            Sign In
-          </button>
-        </form>
-
-        <p>
-          By signing-in you agree to the AMAZON FAKE CLONE Conditions of Use &
-          Sale. Please see our Privacy Notice, our Cookies Notice and our
-          Interest-Based Ads Notice.
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            ref={passwordRef}
+          />
+        </Form.Group>
+        <p className="text-center">
+          Don't have an account,{" "}
+          <a href="/register" style={{ textDecoration: "none" }}>
+            Create one
+          </a>
         </p>
+        <div className="text-center">
+          <Button variant="primary" type="submit">
+            Login
+          </Button>
+        </div>
+      </Form>
 
-        <Link to="/register">
-          <button className="login__registerButton">
-            Create your Amazon Account
-          </button>
-        </Link>
+      <p className="text-center mt-4">Or</p>
+
+      <div className="text-center">
+        <Button
+          className="bg-white border-white shadow text-black"
+          onClick={signInWithGoogle}
+        >
+          <img
+            style={{ height: "1.5rem", marginRight: "0.5rem" }}
+            src="https://upload.wikimedia.org/wikipedia/commons/archive/5/53/20161128230037%21Google_%22G%22_Logo.svg"
+            alt="google logo"
+          />
+          Sign in with Google
+        </Button>
       </div>
-    </div>
+    </>
   );
 }
